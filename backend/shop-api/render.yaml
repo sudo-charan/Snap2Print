@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: snap2print-api
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGODB_URI
+        fromDatabase:
+          name: snap2print-db
+          property: connectionString
+    plan: free
+    numInstances: 1
