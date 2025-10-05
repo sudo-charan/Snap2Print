@@ -3,7 +3,23 @@ import { config } from '../config/env';
 
 // CORS middleware
 export const corsMiddleware = cors({
-  origin: config.cors.origin,
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, Postman, etc.)
+    if (!origin) return callback(null, true);
+
+    const allowedOrigins = [
+      'http://localhost:5173',      // Local frontend
+      'http://localhost:3000',      // Local backend (for testing)
+      'https://snap2print.vercel.app', // Deployed frontend
+      config.cors.origin            // Additional origins from env
+    ].filter(Boolean);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error('Not allowed by CORS'));
+  },
   credentials: config.cors.credentials,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
