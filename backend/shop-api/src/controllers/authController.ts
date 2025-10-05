@@ -4,7 +4,11 @@ import crypto from "crypto";
 import { User } from "../models/User";
 import { Shop } from "../models/Shop";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-super-secret-jwt-key-change-in-production";
+if (!process.env.JWT_SECRET) {
+  throw new Error('JWT_SECRET is not defined in environment variables');
+}
+
+const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
 
 interface AuthRequest extends Request {

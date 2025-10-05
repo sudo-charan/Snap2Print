@@ -3,25 +3,35 @@ import cors from "cors";
 import morgan from "morgan";
 import path from "path";
 import dotenv from "dotenv";
+import { validateEnvVars } from "./config/env";
 import { connectToDatabase } from "./config/db";
+import { ensureUploadsDir } from "./utils/fileStorage";
 import shopsRouter from "./routes/shops";
 import printJobsRouter from "./routes/printJobs";
 import authRouter from "./routes/auth";
 
 dotenv.config();
 
+// Validate required environment variables
+validateEnvVars();
+
 const app = express();
 
-app.use(cors({
-  origin: true, // Allow all origins for development
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://snap2print.vercel.app'] 
+    : true, // Allow all in development
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
-}));
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(morgan("dev"));
 
-const uploadsDir = path.join(process.cwd(), "uploads");
+// Ensure uploads directory exists and has correct permissions
+const uploadsDir = ensureUploadsDir();
 app.use("/uploads", express.static(uploadsDir));
 
 app.get("/health", (_req, res) => res.json({ ok: true }));
