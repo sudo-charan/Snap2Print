@@ -62,7 +62,7 @@ export default function WelcomeScreen() {
             colors={['#fff', '#f0f0f0']}
             style={styles.buttonGradient}
           >
-            <Text style={styles.buttonText}>Sacn QR Code</Text>
+            <Text style={styles.buttonText}>Scan QR Code</Text>
             <QrCode color="#3a7bd5" size={24} />
           </LinearGradient>
         </TouchableOpacity>

@@ -72,25 +72,27 @@ export default function SelectFilesScreen() {
       const shopData = await shopCheckResponse.json();
       console.log('Shop found:', shopData.name);
 
-      // For now, let's just send the metadata without files to test
-      const metadataResponse = await fetch(getApiUrl(`/api/print-jobs/${params.xeroxCenterId}/metadata`), {
+      // Create print job with metadata (without file for now)
+      const createJobResponse = await fetch(getApiUrl('/api/print-jobs'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
         body: JSON.stringify({
+          shopId: params.xeroxCenterId,
           studentName: params.studentName,
           printType: params.printType || 'bw',
           copies: params.copies || '1',
           fileCount: files.length,
           fileNames: files.map(f => f.name),
+          // Note: Files will be uploaded separately in a real implementation
         }),
       });
 
-      if (metadataResponse.ok) {
-        const result = await metadataResponse.json();
-        console.log('Metadata upload successful:', result);
+      if (createJobResponse.ok) {
+        const result = await createJobResponse.json();
+        console.log('Print job created:', result);
 
         router.push({
           pathname: '/success',
@@ -103,9 +105,9 @@ export default function SelectFilesScreen() {
           },
         });
       } else {
-        const errorText = await metadataResponse.text();
-        console.error('Metadata upload failed:', metadataResponse.status, errorText);
-        throw new Error(`Upload failed: ${metadataResponse.status}`);
+        const errorText = await createJobResponse.text();
+        console.error('Print job creation failed:', createJobResponse.status, errorText);
+        throw new Error(`Upload failed: ${createJobResponse.status}`);
       }
     } catch (error) {
       console.error('Upload error:', error);

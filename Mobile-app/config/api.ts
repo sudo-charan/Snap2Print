@@ -4,15 +4,15 @@ import { Platform } from 'react-native';
 export const API_CONFIG = {
   // Production API URL - Update this with your deployed backend URL
   BASE_URL: __DEV__
-    ? 'https://snap2print-api.onrender.com' // Replace with your Render/Production URL
-    : 'https://snap2print-api.onrender.com', // Production URL (same for now)
-  
+    ? 'http://localhost:4000' // Local development backend
+    : 'https://snap2print-api.onrender.com', // Production URL
+
   // Timeout for API requests (in milliseconds)
   TIMEOUT: 30000,
-  
+
   // Enable/disable request/response logging
   DEBUG: __DEV__,
-  
+
   // Platform specific configurations
   PLATFORM: {
     OS: Platform.OS,
