@@ -41,5 +41,8 @@
     "typescript"
   ],
   "author": "Snap2Print Team",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "ts-node-dev": "^2.0.0"
+  }
 }
